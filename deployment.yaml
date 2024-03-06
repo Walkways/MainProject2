@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-app-deployment
+spec:
+  replicas: 2  # Le nombre de réplicas que vous souhaitez
+  selector:
+    matchLabels:
+      app: mon-app
+  template:
+    metadata:
+      labels:
+        app: mon-app
+    spec:
+      containers:
+      - name: mon-app
+        image: mansoursou/mon_app:latest  # Assurez-vous de spécifier la bonne version de votre image
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: mon-app-config
+        

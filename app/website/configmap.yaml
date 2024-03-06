@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mon-app-config
+data:
+  BDD_IP: "{{ .BDD_IP }}"
+  BDD_MDP: "{{ .BDD_MDP }}"
