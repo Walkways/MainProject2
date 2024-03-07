@@ -99,68 +99,66 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 ################ DashBoard Part ###################
 
 resource "google_monitoring_dashboard" "dashboard_soutenance" {
-  dashboard_json = <<EOF
-{
-  "displayName": "Soutenance",
-  "gridLayout": {
-    "columns": "2",
-    "widgets": [
-      {
-        "title": "Widget 1",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"kubernetes.io/container/cpu/usage_rate\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
-            },
-            "plotType": "LINE"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
+  display_name = "Soutenance"
+  grid_layout {
+    columns = 2
+
+    widgets {
+      title = "Widget 1"
+      xy_chart {
+        data_sets {
+          time_series_query {
+            time_series_filter {
+              filter = "metric.type=\"kubernetes.io/container/cpu/usage_rate\""
+              aggregation {
+                per_series_aligner = "ALIGN_RATE"
+              }
+            }
+            unit_override = "1"
           }
+          plot_type = "LINE"
         }
-      },
-      {
-        "text": {
-          "content": "Widget 2",
-          "format": "MARKDOWN"
-        }
-      },
-      {
-        "title": "Widget 3",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"kubernetes.io/container/memory/usage\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
-            },
-            "plotType": "STACKED_BAR"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
-          }
+        timeshift_duration = "0s"
+        y_axis {
+          label = "y1Axis"
+          scale = "LINEAR"
         }
       }
-    ]
-  },
-  "resourceName": "k8s_cluster/[zinc-strategy-393412]/[us-central1]/[mon-cluster]"
+    }
+
+    widgets {
+      title = "Widget 2"
+      text {
+        content = "Markdown content for Widget 2"
+        format  = "MARKDOWN"
+      }
+    }
+
+    widgets {
+      title = "Widget 3"
+      xy_chart {
+        data_sets {
+          time_series_query {
+            time_series_filter {
+              filter = "metric.type=\"kubernetes.io/container/memory/usage\""
+              aggregation {
+                per_series_aligner = "ALIGN_RATE"
+              }
+            }
+            unit_override = "1"
+          }
+          plot_type = "STACKED_BAR"
+        }
+        timeshift_duration = "0s"
+        y_axis {
+          label = "y1Axis"
+          scale = "LINEAR"
+        }
+      }
+    }
+  }
 }
-EOF
-}
+
 
 
 
