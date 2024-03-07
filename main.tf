@@ -98,10 +98,10 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
 ################ DashBoard Part ###################
 
-resource "google_monitoring_dashboard" "dashboard_soutenance_3" {
+resource "google_monitoring_dashboard" "dashboard_soutenance_4" {
   dashboard_json = <<EOF
 {
-  "displayName": "Soutenance 3",
+  "displayName": "Soutenance 4",
   "dashboardFilters": [],
   "mosaicLayout": {
     "columns": 48,
