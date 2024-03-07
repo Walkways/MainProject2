@@ -96,6 +96,144 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 }
 
 
+################ DashBoard Part ###################
+
+resource "google_monitoring_dashboard" "kubernetes_dashboard_soutenance" {
+  dashboard_json = <<EOF
+{
+  "displayName": "Monitoring Dashboard for Kubernetes Cluster",
+  "gridLayout": {
+    "columns": "2",
+    "widgets": [
+      {
+        "title": "CPU Usage",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "metricType": "kubernetes.io/container/cpu/usage_time",
+                  "resourceType": "k8s_container",
+                  "metricLabels": {
+                    "location": "us-central1",
+                    "cluster_name": "mon-cluster",
+                    "namespace_name": "default"
+                  }
+                },
+                "unitOverride": "ms"
+              },
+              "plotType": "LINE"
+            }
+          ],
+          "timeshiftDuration": "0s",
+          "yAxis": {
+            "label": "CPU Usage (ms)"
+          }
+        }
+      },
+      {
+        "title": "Memory Usage",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "metricType": "kubernetes.io/container/memory/usage",
+                  "resourceType": "k8s_container",
+                  "metricLabels": {
+                    "location": "us-central1",
+                    "cluster_name": "mon-cluster",
+                    "namespace_name": "default"
+                  }
+                },
+                "unitOverride": "BYTE"
+              },
+              "plotType": "LINE"
+            }
+          ],
+          "timeshiftDuration": "0s",
+          "yAxis": {
+            "label": "Memory Usage (bytes)"
+          }
+        }
+      },
+      {
+        "title": "Pod Count",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "metricType": "kubernetes.io/pod/total",
+                  "resourceType": "k8s_cluster",
+                  "metricLabels": {
+                    "location": "us-central1",
+                    "cluster_name": "mon-cluster"
+                  }
+                },
+                "unitOverride": "1"
+              },
+              "plotType": "LINE"
+            }
+          ],
+          "timeshiftDuration": "0s",
+          "yAxis": {
+            "label": "Pod Count"
+          }
+        }
+      },
+      {
+        "title": "Disk IO",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "metricType": "kubernetes.io/container/diskio/bytes",
+                  "resourceType": "k8s_container",
+                  "metricLabels": {
+                    "location": "us-central1",
+                    "cluster_name": "mon-cluster",
+                    "namespace_name": "default"
+                  }
+                },
+                "unitOverride": "BYTE"
+              },
+              "plotType": "LINE"
+            }
+          ],
+          "timeshiftDuration": "0s",
+          "yAxis": {
+            "label": "Disk IO (bytes)"
+          }
+        }
+      }
+    ]
+  }
+}
+EOF
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 output "database_ip" {
   value = google_sql_database_instance.mansours.ip_address[0].ip_address
