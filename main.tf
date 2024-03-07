@@ -98,121 +98,70 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
 ################ DashBoard Part ###################
 
-resource "google_monitoring_dashboard" "kubernetes_dashboard_soutenance" {
+resource "google_monitoring_dashboard" "dashboard_soutenance" {
   dashboard_json = <<EOF
 {
-  "displayName": "Monitoring Dashboard for Kubernetes Cluster",
+  "displayName": "Soutenance",
   "gridLayout": {
     "columns": "2",
     "widgets": [
       {
-        "title": "CPU Usage",
+        "title": "Widget 1",
         "xyChart": {
-          "dataSets": [
-            {
-              "timeSeriesQuery": {
-                "timeSeriesFilter": {
-                  "metricType": "kubernetes.io/container/cpu/usage_time",
-                  "resourceType": "k8s_container",
-                  "metricLabels": {
-                    "location": "us-central1",
-                    "cluster_name": "mon-cluster",
-                    "namespace_name": "default"
-                  }
-                },
-                "unitOverride": "ms"
+          "dataSets": [{
+            "timeSeriesQuery": {
+              "timeSeriesFilter": {
+                "filter": "metric.type=\"kubernetes.io/container/cpu/usage_rate\"",
+                "aggregation": {
+                  "perSeriesAligner": "ALIGN_RATE"
+                }
               },
-              "plotType": "LINE"
-            }
-          ],
+              "unitOverride": "1"
+            },
+            "plotType": "LINE"
+          }],
           "timeshiftDuration": "0s",
           "yAxis": {
-            "label": "CPU Usage (ms)"
+            "label": "y1Axis",
+            "scale": "LINEAR"
           }
         }
       },
       {
-        "title": "Memory Usage",
-        "xyChart": {
-          "dataSets": [
-            {
-              "timeSeriesQuery": {
-                "timeSeriesFilter": {
-                  "metricType": "kubernetes.io/container/memory/usage",
-                  "resourceType": "k8s_container",
-                  "metricLabels": {
-                    "location": "us-central1",
-                    "cluster_name": "mon-cluster",
-                    "namespace_name": "default"
-                  }
-                },
-                "unitOverride": "BYTE"
-              },
-              "plotType": "LINE"
-            }
-          ],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "Memory Usage (bytes)"
-          }
+        "text": {
+          "content": "Widget 2",
+          "format": "MARKDOWN"
         }
       },
       {
-        "title": "Pod Count",
+        "title": "Widget 3",
         "xyChart": {
-          "dataSets": [
-            {
-              "timeSeriesQuery": {
-                "timeSeriesFilter": {
-                  "metricType": "kubernetes.io/pod/total",
-                  "resourceType": "k8s_cluster",
-                  "metricLabels": {
-                    "location": "us-central1",
-                    "cluster_name": "mon-cluster"
-                  }
-                },
-                "unitOverride": "1"
+          "dataSets": [{
+            "timeSeriesQuery": {
+              "timeSeriesFilter": {
+                "filter": "metric.type=\"kubernetes.io/container/memory/usage\"",
+                "aggregation": {
+                  "perSeriesAligner": "ALIGN_RATE"
+                }
               },
-              "plotType": "LINE"
-            }
-          ],
+              "unitOverride": "1"
+            },
+            "plotType": "STACKED_BAR"
+          }],
           "timeshiftDuration": "0s",
           "yAxis": {
-            "label": "Pod Count"
-          }
-        }
-      },
-      {
-        "title": "Disk IO",
-        "xyChart": {
-          "dataSets": [
-            {
-              "timeSeriesQuery": {
-                "timeSeriesFilter": {
-                  "metricType": "kubernetes.io/container/diskio/bytes",
-                  "resourceType": "k8s_container",
-                  "metricLabels": {
-                    "location": "us-central1",
-                    "cluster_name": "mon-cluster",
-                    "namespace_name": "default"
-                  }
-                },
-                "unitOverride": "BYTE"
-              },
-              "plotType": "LINE"
-            }
-          ],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "Disk IO (bytes)"
+            "label": "y1Axis",
+            "scale": "LINEAR"
           }
         }
       }
     ]
-  }
+  },
+  "resourceName": "k8s_cluster/[zinc-strategy-393412]/[us-central1]/[mon-cluster]"
 }
 EOF
 }
+
 
 
 
