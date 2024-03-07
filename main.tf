@@ -98,65 +98,159 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
 
 ################ DashBoard Part ###################
 
-resource "google_monitoring_dashboard" "dashboard_soutenance" {
+resource "google_monitoring_dashboard" "dashboard_soutenance_3" {
   dashboard_json = <<EOF
 {
-  "displayName": "Soutenance",
-  "gridLayout": {
-    "columns": "2",
-    "widgets": [
+  "displayName": "Soutenance 3",
+  "dashboardFilters": [],
+  "mosaicLayout": {
+    "columns": 48,
+    "tiles": [
       {
-        "title": "Widget 1",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"kubernetes.io/container/cpu/usage_rate\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
+        "widget": {
+          "title": "Log bytes [SUM]",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
             },
-            "plotType": "LINE"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
+            "dataSets": [
+              {
+                "minAlignmentPeriod": "60s",
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesFilter": {
+                    "aggregation": {
+                      "alignmentPeriod": "60s",
+                      "crossSeriesReducer": "REDUCE_SUM",
+                      "groupByFields": [],
+                      "perSeriesAligner": "ALIGN_RATE"
+                    },
+                    "filter": "metric.type=\"logging.googleapis.com/byte_count\" resource.type=\"k8s_cluster\""
+                  }
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
           }
-        }
+        },
+        "height": 16,
+        "width": 24
       },
       {
-        "text": {
-          "content": "Widget 2",
-          "format": "MARKDOWN"
-        }
+        "widget": {
+          "title": "Kubernetes Cluster - Log entries [SUM]",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "minAlignmentPeriod": "60s",
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesFilter": {
+                    "aggregation": {
+                      "alignmentPeriod": "60s",
+                      "crossSeriesReducer": "REDUCE_SUM",
+                      "groupByFields": [],
+                      "perSeriesAligner": "ALIGN_RATE"
+                    },
+                    "filter": "metric.type=\"logging.googleapis.com/log_entry_count\" resource.type=\"k8s_cluster\""
+                  }
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        },
+        "height": 16,
+        "width": 24,
+        "xPos": 24
       },
       {
-        "title": "Widget 3",
-        "xyChart": {
-          "dataSets": [{
-            "timeSeriesQuery": {
-              "timeSeriesFilter": {
-                "filter": "metric.type=\"kubernetes.io/container/memory/usage\"",
-                "aggregation": {
-                  "perSeriesAligner": "ALIGN_RATE"
-                }
-              },
-              "unitOverride": "1"
+        "widget": {
+          "title": "Kubernetes Container - CPU request utilization [MEAN]",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
             },
-            "plotType": "STACKED_BAR"
-          }],
-          "timeshiftDuration": "0s",
-          "yAxis": {
-            "label": "y1Axis",
-            "scale": "LINEAR"
+            "dataSets": [
+              {
+                "minAlignmentPeriod": "60s",
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesFilter": {
+                    "aggregation": {
+                      "alignmentPeriod": "60s",
+                      "perSeriesAligner": "ALIGN_MEAN"
+                    },
+                    "filter": "metric.type=\"kubernetes.io/container/cpu/request_utilization\" resource.type=\"k8s_container\""
+                  }
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
           }
-        }
+        },
+        "height": 16,
+        "width": 24,
+        "yPos": 16
+      },
+      {
+        "widget": {
+          "title": "Kubernetes Pod - Bytes received [SUM]",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "minAlignmentPeriod": "60s",
+                "plotType": "LINE",
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "timeSeriesFilter": {
+                    "aggregation": {
+                      "alignmentPeriod": "60s",
+                      "crossSeriesReducer": "REDUCE_SUM",
+                      "groupByFields": [],
+                      "perSeriesAligner": "ALIGN_RATE"
+                    },
+                    "filter": "metric.type=\"kubernetes.io/pod/network/received_bytes_count\" resource.type=\"k8s_pod\""
+                  }
+                }
+              }
+            ],
+            "thresholds": [],
+            "yAxis": {
+              "label": "",
+              "scale": "LINEAR"
+            }
+          }
+        },
+        "height": 16,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 16
       }
     ]
-  }
+  },
+  "labels": {}
 }
 EOF
 }
